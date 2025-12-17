@@ -28,12 +28,12 @@ body.gradient-bg {
   rgb(var(--background-end-rgb));
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   @theme {
     --color-background: #0a0a0a;
     --color-foreground: #ededed;
   }
-}
+} */
 
 @keyframes fadeIn {
   0% {
