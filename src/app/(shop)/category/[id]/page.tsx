@@ -1,22 +1,41 @@
-import { notFound } from "next/navigation";
+import { ProductGrid, Title } from '@/components';
+import { Category } from '@/interfaces';
+import { initialData } from '@/seed/seed';
+import { notFound } from 'next/navigation';
 
-interface Props{
+const products = initialData.products;
+
+interface Props {
   params: {
-   id: string; 
-  }
-};
+    id: Category;
+  };
+}
 
 export default async function CategoryPage({ params }: Props) {
-
   const { id } = await params;
-
-  if( id === 'kids' ){
-    notFound();
+  const productsCategoryFilter = products.filter(
+    (product) => product.gender === id
+  );
+  
+  const labels: Record<Category, string> = {
+    men: 'Hombres',
+    women: 'Mujeres',
+    kid: 'Niños',
+    unisex: 'Todos',
   };
+
+  // if( id === 'kids' ){
+  //   notFound();
+  // };
 
   return (
     <div>
-      <h1>Category Page { id }</h1>
+      <Title 
+        title={`Artículos para ${labels[id]}`} 
+        subtitle='Todos los productos'
+      />
+
+      <ProductGrid products={productsCategoryFilter} />
     </div>
   );
-};
+}
