@@ -1,4 +1,4 @@
-import { SizeSelector } from '@/components';
+import { QuantitySelector, SizeSelector } from '@/components';
 import { titleFont } from '@/config/fonts';
 import { initialData } from '@/seed/seed';
 import { notFound } from 'next/navigation';
@@ -37,7 +37,10 @@ export default async function ProductPage({ params }: Props) {
           selectedSize={ product.sizes[0] }
           availableSizes={ product.sizes }
         />
-        {/* Cuantity selector */}
+        {/* Quantity selector */}
+        <QuantitySelector 
+          quantity={ 2 }
+        />
       
         {/* Button */}
         <button className='btn-primary my-5'>
