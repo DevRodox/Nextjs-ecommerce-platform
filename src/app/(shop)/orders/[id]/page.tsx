@@ -1,8 +1,7 @@
-import Link from 'next/link';
+import Image from 'next/image';
 
 import { Title } from '@/components';
 import { initialData } from '@/seed/seed';
-import Image from 'next/image';
 import clsx from 'clsx';
 import { IoCartOutline } from 'react-icons/io5';
 

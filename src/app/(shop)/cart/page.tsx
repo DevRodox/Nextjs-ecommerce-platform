@@ -1,7 +1,8 @@
-import { QuantitySelector, Title } from '@/components';
-import { initialData } from '@/seed/seed';
 import Image from 'next/image';
 import Link from 'next/link';
+// import { redirect } from 'next/navigation';
+import { QuantitySelector, Title } from '@/components';
+import { initialData } from '@/seed/seed';
 
 const productsInCart = [
   initialData.products[0],
@@ -10,6 +11,9 @@ const productsInCart = [
 ];
 
 export default function CartPage() {
+
+  // redirect('/empty');
+
   return (
     <div className='flex justify-center intems-center mb-72 px-10 sm:px-10'>
       <div className='flex flex-col w-250'>
