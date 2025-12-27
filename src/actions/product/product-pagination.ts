@@ -1,44 +1,53 @@
 'use server';
 
-import prisma from "@/lib/prisma";
+import prisma from '@/lib/prisma';
 
 interface PaginationOptions {
   page?: number;
   take?: number;
-};
+}
 
-
-export const getPaginatedProductsWithImages = async({ 
+export const getPaginatedProductsWithImages = async ({
   page = 1,
   take = 12,
 }: PaginationOptions) => {
-
-  if ( isNaN( Number(page)) ) page = 1;
-  if ( page < 1 ) page = 1;
+  if (isNaN(Number(page))) page = 1;
+  if (page < 1) page = 1;
 
   try {
     
-    const products = await prisma.product.findMany({
-      take,
-      skip: ( page - 1 ) * take,
-      include: {
-        productImages: {
-          take: 2,
-          select: {
-            url: true
-          }
-        }
-      }
-    });
+    //1. Obtener los productos y el totalCount 
+
+    const [products, totalCount] = await Promise.all([
+      prisma.product.findMany({
+        take,
+        skip: (page - 1) * take,
+        include: {
+          productImages: {
+            take: 2,
+            select: {
+              url: true,
+            },
+          },
+        },
+      }),
+      prisma.product.count({}),
+    ]);
+
+    //2. Obtener el total de páginas
+    //todo:
+    const totalPages = Math.ceil(totalCount / take);
 
     return {
-      products: products.map( product => ({
-        ...product, 
-        images: product.productImages.map( image => image.url )
-      }))
+      currentPage: page,
+      totalPages,
+      products: products.map((product) => ({
+        ...product,
+        images: product.productImages.map((image) => image.url),
+      })),
     };
   } catch (error) {
-    console.error( error );
+    console.error(error);
     throw new Error('No se pudo cargar los productos');
-  };
+  }
 };
