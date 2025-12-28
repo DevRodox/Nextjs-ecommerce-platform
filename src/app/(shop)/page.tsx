@@ -6,7 +6,6 @@ import { Pagination, ProductGrid, Title } from '@/components';
 interface Props{
   searchParams: {
     page?: string;
-
   }
 };
 
@@ -15,7 +14,7 @@ export default async function Home({ searchParams }: Props) {
   const { page: pageParam } = await searchParams;
   const page = parseInt( pageParam ?? '1' );
 
-  const { products, currentPage, totalPages } = await getPaginatedProductsWithImages({ page });
+  const { products, totalPages } = await getPaginatedProductsWithImages({ page });
 
   if( products.length === 0 ) {
     redirect('/');
