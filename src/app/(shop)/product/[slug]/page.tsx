@@ -1,16 +1,15 @@
 export const revalidate = 604800;
-import { Metadata, ResolvingMetadata } from 'next';
+import { Metadata } from 'next';
 
 import { notFound } from 'next/navigation';
 import { getProductBySlug } from '@/actions';
 import {
   ProductMobileSlideShow,
   ProductSlideShow,
-  QuantitySelector,
-  SizeSelector,
   StockLabel,
 } from '@/components';
 import { titleFont } from '@/config/fonts';
+import { AddToCart } from './ui/AddToCart';
 
 interface Props {
   params: {
@@ -66,25 +65,16 @@ export default async function ProductPage({ params }: Props) {
       {/* Details */}
       <div className='col-span-1 px-5'>
         <StockLabel slug={product.slug} />
-        <h1 className={`${titleFont.className} antialised font-bold text-xl`}>
+        <h1 className={`${ titleFont.className } antialised font-bold text-xl`}>
           {product.title}
         </h1>
-        <p className='text-lg mb-5'>${product.price}</p>
+        <p className='text-lg mb-5'>${ product.price }</p>
 
-        {/* Sizes selector */}
-        <SizeSelector
-          selectedSize={product.sizes[0]}
-          availableSizes={product.sizes}
-        />
-        {/* Quantity selector */}
-        <QuantitySelector quantity={2} />
-
-        {/* Button */}
-        <button className='btn-primary my-5'>Agregar al carrito</button>
+        <AddToCart product={ product }/>
 
         {/* Description */}
         <h3 className='font-bold text-sm'>Descripción</h3>
-        <p className='font-light'>{product.description}</p>
+        <p className='font-light'>{ product.description }</p>
       </div>
     </div>
   );
