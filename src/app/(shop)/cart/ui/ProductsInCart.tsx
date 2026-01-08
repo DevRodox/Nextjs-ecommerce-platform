@@ -9,21 +9,22 @@ import Link from 'next/link';
 
 export const ProductsInCart = () => {
   const [loaded, setLoaded] = useState(false);
+  const updateProductQuantity = useCartStore((state) => state.updateProductQuantity);
   const productsInCart = useCartStore((state) => state.cart);
 
-  useEffect( () =>{
+  useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setLoaded( true );
-  },[]);
+    setLoaded(true);
+  }, []);
 
-  if( !loaded ) {
-    return <p>Loading...</p>
+  if (!loaded) {
+    return <p>Loading...</p>;
   }
 
   return (
     <>
       {productsInCart.map((product) => (
-        <div key={`${ product.slug }-${ product.size }`} className='flex mb-5'>
+        <div key={`${product.slug}-${product.size}`} className='flex mb-5'>
           <Image
             src={`/products/${product.image}`}
             width={100}
@@ -37,16 +38,16 @@ export const ProductsInCart = () => {
           />
 
           <div>
-            <Link 
+            <Link
               className='hover:underline cursor-pointer'
               href={`/product/${product.slug}`}
             >
-            { product.size } - { product.title }
+              {product.size} - {product.title}
             </Link>
             <p>${product.price}</p>
             <QuantitySelector
               quantity={ product.quantity }
-              onQuantityChanged={(value) => console.log(value)}
+              onQuantityChanged={ ( quantity ) => updateProductQuantity( product, quantity ) }
             />
             <button className='underline mt-3'>Remover</button>
           </div>
