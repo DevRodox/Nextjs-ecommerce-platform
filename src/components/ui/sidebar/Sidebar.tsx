@@ -16,7 +16,7 @@ import { useUIStore } from '@/store';
 import clsx from 'clsx';
 
 const userMenu = [
-  { href: '/', label: 'Perfil', icon: IoPersonOutline },
+  { href: '/profile', label: 'Perfil', icon: IoPersonOutline },
   { href: '/', label: 'Órdenes', icon: IoTicketOutline },
   { href: '/', label: 'Ingresar', icon: IoLogInOutline },
   { href: '/', label: 'Salir', icon: IoLogOutOutline },
@@ -81,6 +81,7 @@ export const Sidebar = () => {
               href={item.href}
               label={item.label}
               Icon={item.icon}
+              onClick={ closeMenu }
             />
           ))}
         </div>
@@ -96,6 +97,7 @@ export const Sidebar = () => {
               href={item.href}
               label={item.label}
               Icon={item.icon}
+              onClick={ closeMenu }
             />
           ))}
         </div>
