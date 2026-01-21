@@ -1,5 +1,8 @@
 'use client';
 
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+
 import {
   IoCloseOutline,
   IoSearchOutline,
@@ -13,17 +16,14 @@ import {
 
 import clsx from 'clsx';
 
-import { signOut } from '@/lib/auth-client';
+import { signOut, useSession } from '@/lib/auth-client';
 
 import { SidebarItem } from './SidebarItem';
 import { useUIStore } from '@/store';
-import { useRouter } from 'next/navigation';
-
 
 const userMenu = [
   { href: '/profile', label: 'Perfil', icon: IoPersonOutline },
   { href: '/', label: 'Órdenes', icon: IoTicketOutline },
-  { href: '/auth/login', label: 'Ingresar', icon: IoLogInOutline },
 ];
 
 const adminMenu = [
@@ -32,19 +32,19 @@ const adminMenu = [
   { href: '/', label: 'Usuarios', icon: IoPeopleOutline },
 ];
 
-
 export const Sidebar = () => {
-  
   const router = useRouter();
   const isSideMenuOpen = useUIStore((state) => state.isSideMenuOpen);
   const closeMenu = useUIStore((state) => state.closeSideMenu);
-  
-  const handleLogout = async() => {
+  const { data: session } = useSession();
+  const isAuthenticated = !!session?.user;
+
+  const handleLogout = async () => {
     await signOut();
     closeMenu();
     router.refresh();
   };
-  
+
   return (
     <>
       {/* Overlay */}
@@ -97,13 +97,26 @@ export const Sidebar = () => {
           ))}
         </div>
 
-        <button
-          className=' w-full flex items-center p-2 rounded hover:bg-gray-100 transition-all'
-          onClick={ handleLogout }
-        >
-          <IoLogOutOutline size={30} />
-          <span className='ml-3 text-xl'>Salir</span>
-        </button>
+        {isAuthenticated && (
+          <button
+            className=' w-full flex items-center p-2 rounded hover:bg-gray-100 transition-all'
+            onClick={handleLogout}
+          >
+            <IoLogOutOutline size={30} />
+            <span className='ml-3 text-xl'>Salir</span>
+          </button>
+        )}
+
+        {!isAuthenticated && (
+          <Link
+            href={'/auth/login'}
+            className='flex items-center p-2 rounded hover:bg-gray-100 transition-all'
+            onClick={closeMenu}
+          >
+            <IoLogInOutline size={30} />
+            <span className='ml-3 text-xl'>Ingresar</span>
+          </Link>
+        )}
 
         {/* Separator */}
         <div className='my-10 h-px w-full bg-gray-200' />

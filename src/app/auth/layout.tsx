@@ -7,6 +7,7 @@ export default async function ShopLayout({
 }: {
   children: React.ReactNode;
 }) {
+  
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -14,8 +15,6 @@ export default async function ShopLayout({
   if (session?.user) {
     redirect('/');
   }
-
-  console.log({ session });
 
   return (
     <main className='flex justify-center'>
