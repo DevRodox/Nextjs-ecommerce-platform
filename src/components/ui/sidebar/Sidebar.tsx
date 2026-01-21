@@ -11,15 +11,19 @@ import {
   IoPeopleOutline,
 } from 'react-icons/io5';
 
+import clsx from 'clsx';
+
+import { signOut } from '@/lib/auth-client';
+
 import { SidebarItem } from './SidebarItem';
 import { useUIStore } from '@/store';
-import clsx from 'clsx';
+import { useRouter } from 'next/navigation';
+
 
 const userMenu = [
   { href: '/profile', label: 'Perfil', icon: IoPersonOutline },
   { href: '/', label: 'Órdenes', icon: IoTicketOutline },
-  { href: '/', label: 'Ingresar', icon: IoLogInOutline },
-  { href: '/', label: 'Salir', icon: IoLogOutOutline },
+  { href: '/auth/login', label: 'Ingresar', icon: IoLogInOutline },
 ];
 
 const adminMenu = [
@@ -28,10 +32,19 @@ const adminMenu = [
   { href: '/', label: 'Usuarios', icon: IoPeopleOutline },
 ];
 
+
 export const Sidebar = () => {
+  
+  const router = useRouter();
   const isSideMenuOpen = useUIStore((state) => state.isSideMenuOpen);
   const closeMenu = useUIStore((state) => state.closeSideMenu);
-
+  
+  const handleLogout = async() => {
+    await signOut();
+    closeMenu();
+    router.refresh();
+  };
+  
   return (
     <>
       {/* Overlay */}
@@ -39,28 +52,26 @@ export const Sidebar = () => {
       {isSideMenuOpen && (
         <>
           <div className='fixed inset-0 z-10 bg-black/30' />
-          <div 
-            className='fixed inset-0 z-10 backdrop-blur-sm' 
-            onClick={ closeMenu }
+          <div
+            className='fixed inset-0 z-10 backdrop-blur-sm'
+            onClick={closeMenu}
           />
         </>
       )}
 
       {/* Sidebar */}
       <nav
-        className={
-          clsx(
-            'fixed right-0 top-0 z-20 h-screen w-100 bg-white p-5 shadow-2xl duration-300',
-            {
-              'translate-x-full': !isSideMenuOpen
-            }
-          )
-        }
+        className={clsx(
+          'fixed right-0 top-0 z-20 h-screen w-100 bg-white p-5 shadow-2xl duration-300',
+          {
+            'translate-x-full': !isSideMenuOpen,
+          },
+        )}
       >
         <IoCloseOutline
           size={40}
           className='absolute top-5 right-5 cursor-pointer'
-          onClick={ closeMenu }
+          onClick={closeMenu}
         />
 
         {/* Search */}
@@ -81,10 +92,18 @@ export const Sidebar = () => {
               href={item.href}
               label={item.label}
               Icon={item.icon}
-              onClick={ closeMenu }
+              onClick={closeMenu}
             />
           ))}
         </div>
+
+        <button
+          className=' w-full flex items-center p-2 rounded hover:bg-gray-100 transition-all'
+          onClick={ handleLogout }
+        >
+          <IoLogOutOutline size={30} />
+          <span className='ml-3 text-xl'>Salir</span>
+        </button>
 
         {/* Separator */}
         <div className='my-10 h-px w-full bg-gray-200' />
@@ -97,7 +116,7 @@ export const Sidebar = () => {
               href={item.href}
               label={item.label}
               Icon={item.icon}
-              onClick={ closeMenu }
+              onClick={closeMenu}
             />
           ))}
         </div>

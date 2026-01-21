@@ -10,14 +10,14 @@ export default async function ProfilePage() {
 
   if (!session?.user) {
     // redirect('/auth/login?returnTo=/profile');
-    redirect('/');
+    redirect('/auth/login');
   }
 
   return (
     <div>
       <Title title={'Perfil'} />
 
-      <pre>{JSON.stringify(session.user, null, 2)}</pre>
+      <pre>{JSON.stringify(session!.user, null, 2)}</pre>
     </div>
   );
 }
