@@ -38,6 +38,7 @@ export const Sidebar = () => {
   const closeMenu = useUIStore((state) => state.closeSideMenu);
   const { data: session } = useSession();
   const isAuthenticated = !!session?.user;
+  const isAdmin = session?.user.role === 'admin';
 
   const handleLogout = async () => {
     await signOut();
@@ -84,27 +85,28 @@ export const Sidebar = () => {
           />
         </div>
 
-        {/* User menu */}
-        <div className='mt-10 space-y-2'>
-          {userMenu.map((item) => (
-            <SidebarItem
-              key={item.label}
-              href={item.href}
-              label={item.label}
-              Icon={item.icon}
-              onClick={closeMenu}
-            />
-          ))}
-        </div>
-
         {isAuthenticated && (
-          <button
-            className=' w-full flex items-center p-2 rounded hover:bg-gray-100 transition-all'
-            onClick={handleLogout}
-          >
-            <IoLogOutOutline size={30} />
-            <span className='ml-3 text-xl'>Salir</span>
-          </button>
+          <>
+            {/* User menu */}
+            <div className='mt-10 space-y-2'>
+              {userMenu.map((item) => (
+                <SidebarItem
+                  key={item.label}
+                  href={item.href}
+                  label={item.label}
+                  Icon={item.icon}
+                  onClick={closeMenu}
+                />
+              ))}
+            </div>
+            <button
+              className=' w-full flex items-center p-2 rounded hover:bg-gray-100 transition-all'
+              onClick={handleLogout}
+            >
+              <IoLogOutOutline size={30} />
+              <span className='ml-3 text-xl'>Salir</span>
+            </button>
+          </>
         )}
 
         {!isAuthenticated && (
@@ -118,21 +120,25 @@ export const Sidebar = () => {
           </Link>
         )}
 
-        {/* Separator */}
-        <div className='my-10 h-px w-full bg-gray-200' />
+        {isAdmin && (
+          <>
+            {/* Separator */}
+            <div className='my-10 h-px w-full bg-gray-200' />
 
-        {/* Admin menu */}
-        <div className='space-y-2'>
-          {adminMenu.map((item) => (
-            <SidebarItem
-              key={item.label}
-              href={item.href}
-              label={item.label}
-              Icon={item.icon}
-              onClick={closeMenu}
-            />
-          ))}
-        </div>
+            {/* Admin menu */}
+            <div className='space-y-2'>
+              {adminMenu.map((item) => (
+                <SidebarItem
+                  key={item.label}
+                  href={item.href}
+                  label={item.label}
+                  Icon={item.icon}
+                  onClick={closeMenu}
+                />
+              ))}
+            </div>
+          </>
+        )}
       </nav>
     </>
   );
